@@ -114,3 +114,7 @@ button {
 	text-decoration: none !important;
 	cursor: pointer;
 }
+
+.message {
+	color: Red;
+}
