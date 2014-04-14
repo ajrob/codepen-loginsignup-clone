@@ -27,6 +27,9 @@ Reponse Objects:
 	('jerry', '@#!$%@')
 
 */
+var reg_non_alphanumeric = /[^A-Za-z0-9]/;
+var reg_password = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/
+var reg_email = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 
 function handleResponse(response, fromFormMessage){
@@ -44,6 +47,111 @@ function handleResponse(response, fromFormMessage){
 }
 
 $('document').ready(function() {
+	/******************************************/
+	// Black Diamond - Input validation
+	/******************************************/
+	function validate(event){
+		var validation = {
+			valid: false,
+			error: null
+		}
+		var inputValue = event.target.value;
+		switch(event.target.name){
+			case 'name':
+				if(!inputValue) {
+					validation.error = 'Please provide a name';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			case 'firstname':
+				if (!inputValue) {
+					validation.error = 'Please provide a first name';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			case 'lastname':
+				if (!inputValue) {
+					validation.error = 'Please provide a last name';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			case 'email':
+				if (!inputValue) {
+					validation.error = 'Please provide an email address';
+					return validation;
+				}
+				if (!reg_email.test(inputValue)) {
+					validation.error = 'Please provide a valid email address';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			case 'username':
+				if (!inputValue) {
+					validation.error = 'Please provide a username';
+					return validation;
+				}
+				if (inputValue.length < 5) {
+					validation.error = 'Username must be at least 5 characters';
+					return validation;
+				}
+				if (reg_non_alphanumeric.test(inputValue)) {
+					validation.error = 'Username must contain only letters and numbers';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			case 'password':
+				if (!inputValue) {
+					validation.error = 'Please provide a password';
+					return validation;
+				}
+				if (inputValue.length < 5) {
+					validation.error = 'Password must be at least 5 characters';
+					return validation;
+				}
+				if (!reg_password.test(inputValue)) {
+					validation.error = 'Password must contain at least one letter and one number';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			case 'passwordCheck':
+				if (!inputValue) {
+					validation.error = 'Please retype your password';
+					return validation;
+				}
+				validation.success = true;
+				return validation;
+				break;
+			default:
+				validation.error = "Input field not valid";
+				return validation;
+				break;
+		}
+	}
+
+	function printMessage(event){
+		if (event.target.id.indexOf("signup") > -1) {
+			var fromForm = "Signup";
+		} else { var fromForm = "Login"; }
+		var response = validate(event);
+		if (!response.success) {
+			handleResponse(response, fromForm);
+		}
+	}
+
+	$('#signup-firstname-field, #signup-lastname-field, #signup-email-field, #signup-username-field, #signup-password-field').on("blur", printMessage);
+
 	// Create user in codepen.object.User namespace
 	codepen.objects = {
 		user: {

@@ -24,54 +24,6 @@ codepen.api.signup = function(user) {
 		error: ''
 	}
 
-	if (!user.name) {
-		if (!user.hasOwnProperty('firstname')) {
-			response.error = 'Please provide a name';
-			return response;
-		}
-		else {
-			if (!user.firstname || !user.lastname) {
-				response.error = 'Please provide both a first name and last name';
-				return response;
-			}
-		}
-	}
-	if (!user.email) {
-		response.error = 'Please provide an email';
-		return response;
-	}
-
-	if (!reg_email.test(user.email)) {
-		response.error = 'Please provide a valid email address';
-		return response;
-	}
-
-	if (!user.username) {
-		response.error = 'Please provide a username';
-		return response;
-	}
-	if (user.username.length < 5) {
-		response.error = 'Username must be at least 5 characters';
-		return response;
-	}
-	if (reg_non_alphanumeric.test(user.username)) {
-		response.error = 'Username must contain only letters and numbers';
-		return response;
-	}
-
-	if (!user.password) {
-		response.error = 'Please provide a password';
-		return response;
-	}
-	if (user.password.length < 5) {
-		response.error = 'Password must be at least 5 characters';
-		return response;
-	}
-	if (!reg_password.test(user.password)) {
-		response.error = 'Password must contain at least one letter and one number';
-		return response;
-	}
-
 	users.push(user);
 	response.success = true;
 	return response;
